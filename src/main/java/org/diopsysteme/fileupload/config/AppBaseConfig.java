@@ -5,7 +5,14 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import org.diopsysteme.fileupload.Data.Enums.StorageType;
 import org.diopsysteme.fileupload.Data.Repositories.UserRepository;
+import org.diopsysteme.fileupload.Strategy.Impl.StoreDBStrategy;
+import org.diopsysteme.fileupload.Strategy.Impl.StoreLocalStrategy;
+import org.diopsysteme.fileupload.Strategy.Interfaces.StorageStrategy;
+import org.diopsysteme.fileupload.Strategy.Interfaces.StorageWhichInterface;
+import org.diopsysteme.fileupload.Strategy.Which.StorageWhich;
+import org.diopsysteme.fileupload.Strategy.Which.StorageWhich2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +33,8 @@ import prog.dependancy.Services.Interfaces.EmailService;
 import prog.dependancy.Services.Interfaces.IOtpService;
 import prog.dependancy.Services.Interfaces.JwtServiceInterface;
 import prog.dependancy.Services.Interfaces.QRCodeService;
+
+import java.util.Map;
 
 @Configuration
 @OpenAPIDefinition(info = @Info(title = "Your API Title", version = "v1"),
@@ -97,4 +106,16 @@ public class AppBaseConfig {
     QRCodeService qrCodeService(){
         return new QRCodeServiceImpl();
     }
+    @Bean
+    public Map<StorageType, StorageStrategy> strategyMap(
+            StoreDBStrategy dbStrategy,
+            StoreLocalStrategy localStrategy) {
+        return Map.of(
+                StorageType.DB, dbStrategy,
+                StorageType.LOCAL, localStrategy
+        );
+    }
+
+
+
 }

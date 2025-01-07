@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.diopsysteme.fileupload.Data.Entities.File;
 import org.diopsysteme.fileupload.Services.Impl.FileService;
 import org.diopsysteme.fileupload.Web.Dtos.Requests.FileReqDto;
+import org.diopsysteme.fileupload.Web.Dtos.Responses.FileDownloadDto;
 import org.diopsysteme.fileupload.Web.Dtos.Responses.FileResDto;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -38,9 +39,14 @@ public class FileController extends AbstractController<File, FileReqDto, FileRes
         FileResDto response = service.save(request);
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/{id}/download")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable Long id) throws FileNotFoundException {
-        return fileService.downloadFile(id);
+    @GetMapping("/download/{id}")
+    public ResponseEntity<byte[]> downloadFile(@PathVariable Long id) {
+        try {
+            FileDownloadDto downloadDto = fileService.getFileForDownload(id);
+            return downloadDto.toResponseEntity();
+        } catch (FileNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
     @GetMapping("/files")
     public Page<FileResDto> searchFiles(
