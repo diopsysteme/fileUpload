@@ -40,7 +40,7 @@ public class SecurityConfig{
                 .requestMatchers("/api/v1/referentiels").hasAnyRole("ADMIN","MANAGER")
                 .requestMatchers("emargements/**").hasAnyRole("APPRENANT","MANAGER","COACH","VIGILE")
                 .requestMatchers("api/v1/apprenants/**").hasAnyRole("ADMIN","MANAGER","CME")
-                .requestMatchers("/auth/**","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**","/error/","/webjars/","/api-docs/**","/user","/login")
+                .requestMatchers("/auth/**","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**","/error/","/webjars/","/api-docs/**","/user","/login","/monitoring/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
