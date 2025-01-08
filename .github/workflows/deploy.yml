@@ -10,7 +10,7 @@ jobs:
       - name: Verify code from github
         uses: actions/checkout
       - name: log in to docker hub
-        run: echo "dckr_pat_4rjjlFXpX7vmSAhJScGkEkIiJ0Q" | docker login -u diopsysteme  --password-stdin
+        run: echo "" | docker login -u diopsysteme  --password-stdin
       - name: Builder l'image
         run: |
           docker build -t diopsysteme/fileuplaod
