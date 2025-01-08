@@ -10,7 +10,7 @@ jobs:
       - name: Verify code from github
         uses: actions/checkout@v3
       - name: log in to docker hub
-        run: echo "${{secret.DOCKER_PASSWORD}}" | docker login -u diopsysteme  --password-stdin
+        run: echo "${{secrets.DOCKER_PASSWORD}}" | docker login -u diopsysteme  --password-stdin
       - name: Builder l'image
         run: |
           docker build -t diopsysteme/fileuplaod .
