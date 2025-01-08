@@ -8,12 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Verify code from github
-        uses: actions/checkout
+        uses: actions/checkout@v3
       - name: log in to docker hub
-        run: echo "sss" | docker login -u diopsysteme  --password-stdin
+        run: echo "${{secret.DOCKER_PASSWORD}}" | docker login -u diopsysteme  --password-stdin
       - name: Builder l'image
         run: |
-          docker build -t diopsysteme/fileuplaod
+          docker build -t diopsysteme/fileuplaod .
           docker push diopsysteme/fileupload
       - name: Declencher le deploiement render
         run: |
