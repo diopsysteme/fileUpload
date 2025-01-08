@@ -1,0 +1,20 @@
+name: My Render deployment ci/cd
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify code from github
+        uses: actions/checkout
+      - name: log in to docker hub
+        run: echo "dckr_pat_4rjjlFXpX7vmSAhJScGkEkIiJ0Q" | docker login -u diopsysteme  --password-stdin
+      - name: Builder l'image
+        run: |
+          docker build -t diopsysteme/fileuplaod
+          docker push diopsysteme/fileupload
+      - name: Declencher le deploiement render
+        run: |
+          curl -X POST "https://api.render.com/deploy/srv-ctu3cfrqf0us73f0tgsg?key=Hq7AT62goTw"
