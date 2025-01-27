@@ -13,8 +13,8 @@ jobs:
         run: echo "${{secrets.DOCKER_PASSWORD}}" | docker login -u diopsysteme  --password-stdin
       - name: Builder l'image
         run: |
-          docker build -t diopsysteme/fileuplaod .
-          docker push diopsysteme/fileupload
+          docker build -t diopsysteme/fileupload:latest .
+          docker push diopsysteme/fileupload:latest
       - name: Declencher le deploiement render
         run: |
           curl -X POST "https://api.render.com/deploy/srv-ctu3cfrqf0us73f0tgsg?key=Hq7AT62goTw"
