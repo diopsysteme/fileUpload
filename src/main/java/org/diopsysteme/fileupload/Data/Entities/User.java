@@ -20,6 +20,7 @@ public class User extends EntityAbstract implements UserDetails {
     private String login;
     private String password;
     private String type;
+    private String idK;
     @Override
     public String getPassword() {
         return password;
@@ -28,6 +29,10 @@ public class User extends EntityAbstract implements UserDetails {
     public String getUsername() {
         return login;
     }
+
+
+
+
     @Override
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {

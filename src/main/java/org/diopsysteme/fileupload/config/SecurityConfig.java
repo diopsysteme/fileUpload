@@ -14,8 +14,7 @@ import prog.dependancy.Filters.JwtAuthenticationFilter;
 
 import java.util.List;
 
-@EnableWebSecurity
-@Configuration
+
 public class SecurityConfig{
 
     private final AuthenticationProvider authenticationProvider;
@@ -29,38 +28,42 @@ public class SecurityConfig{
         this.authenticationProvider = authenticationProvider;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
+//public String diop(){
+//        return null;
+//    }
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http.csrf()
+//                .disable()
+//                .authorizeRequests()
+//                .requestMatchers("/Promotions/**").hasAnyRole("ADMIN","MANAGER")
+//                .requestMatchers("/notes/**").hasAnyRole("CME","MANAGER")
+//                .requestMatchers("/api/v1/referentiels").hasAnyRole("ADMIN","MANAGER")
+//                .requestMatchers("emargements/**").hasAnyRole("APPRENANT","MANAGER","COACH","VIGILE")
+//                .requestMatchers("api/v1/apprenants/**").hasAnyRole("ADMIN","MANAGER","CME")
+//                .requestMatchers("/auth/**","/error","/swagger-ui/**","/v1/api-docs/**","/v3/api-docs/**","/swagger-resources/**","/error/**","/webjars/","/api-docs/**","/user","/login","/monitoring/**","/api/public/**")
+//                .permitAll()
+//                .anyRequest()
+//                .authenticated()
+//                .and()
+//                .authenticationProvider(authenticationProvider)
+//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+//
+//        return http.build();
+//    }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
-                .authorizeRequests()
-                .requestMatchers("/Promotions/**").hasAnyRole("ADMIN","MANAGER")
-                .requestMatchers("/notes/**").hasAnyRole("CME","MANAGER")
-                .requestMatchers("/api/v1/referentiels").hasAnyRole("ADMIN","MANAGER")
-                .requestMatchers("emargements/**").hasAnyRole("APPRENANT","MANAGER","COACH","VIGILE")
-                .requestMatchers("api/v1/apprenants/**").hasAnyRole("ADMIN","MANAGER","CME")
-                .requestMatchers("/auth/**","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**","/error/","/webjars/","/api-docs/**","/user","/login","/monitoring/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource(){
+//        CorsConfiguration configuration = new CorsConfiguration();
+//
+//        configuration.setAllowedOrigins(List.of("*"));
+//        configuration.setAllowedMethods(List.of("*"));
+//        configuration.setAllowedHeaders(List.of("*"));
+//        configuration.setAllowCredentials(true);
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 
-        return http.build();
-    }
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource(){
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.setAllowedOrigins(List.of("*"));
-        configuration.setAllowedMethods(List.of("*"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
 }

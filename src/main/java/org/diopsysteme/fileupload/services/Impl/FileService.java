@@ -1,22 +1,22 @@
-package org.diopsysteme.fileupload.Services.Impl;
+package org.diopsysteme.fileupload.services.Impl;
 
 import org.diopsysteme.fileupload.Data.Entities.File;
 import org.diopsysteme.fileupload.Data.Repositories.FileRepository;
-import org.diopsysteme.fileupload.Strategy.Interfaces.StorageStrategy;
-import org.diopsysteme.fileupload.Strategy.Interfaces.StorageWhichInterface;
-import org.diopsysteme.fileupload.Strategy.Which.StorageWhich;
+import org.diopsysteme.fileupload.strategy.Interfaces.StorageStrategy;
+import org.diopsysteme.fileupload.strategy.Interfaces.StorageWhichInterface;
 import org.diopsysteme.fileupload.Web.Dtos.Mappers.FileMapper;
 import org.diopsysteme.fileupload.Web.Dtos.Requests.FileReqDto;
 import org.diopsysteme.fileupload.Web.Dtos.Responses.FileDownloadDto;
 import org.diopsysteme.fileupload.Web.Dtos.Responses.FileResDto;
+import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import prog.dependancy.Services.Interfaces.AbstractService;
 import org.springframework.stereotype.Service;
 
@@ -32,11 +32,12 @@ FileRepository fileRepository;
         FileMapper fileMapper;
 
     StorageWhichInterface storageWhich;
-    public FileService(FileRepository repository, FileMapper mapper, @Qualifier("storageWhich2") StorageWhichInterface storageWhich) {
+    public FileService(FileRepository repository, FileMapper mapper, @Qualifier("storageWhich3") StorageWhichInterface storageWhich) {
         this.repository = repository;
         this.mapper = mapper;
         this.storageWhich = storageWhich;
     }
+    @CacheEvict(value = "files",allEntries = true)
     @Override
     public FileResDto save(FileReqDto fileReqDto){
         File file = new File();
@@ -57,12 +58,14 @@ FileRepository fileRepository;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         file.setDate(LocalDate.now());
 
         File fileS = repository.save(file);
         return mapper.toDto(fileS);
     }
-    public FileDownloadDto getFileForDownload(Long id) throws FileNotFoundException {
+    @Cacheable(value = "files",key = "#id")
+        public FileDownloadDto getFileForDownload(Long id) throws FileNotFoundException {
         File file = fileRepository.findById(id)
                 .orElseThrow(() -> new FileNotFoundException("Fichier non trouvé avec l'ID: " + id));
 
@@ -83,7 +86,7 @@ FileRepository fileRepository;
     }
 
 
-
+@Cacheable(value = "files")
     public Page<FileResDto> searchFiles(String searchQuery, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 

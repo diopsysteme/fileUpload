@@ -1,7 +1,8 @@
-package org.diopsysteme.fileupload.Strategy.Impl;
+package org.diopsysteme.fileupload.strategy.Impl;
 
 import org.diopsysteme.fileupload.Data.Entities.File;
-import org.diopsysteme.fileupload.Strategy.Interfaces.StorageStrategy;
+import org.diopsysteme.fileupload.Data.Enums.StorageType;
+import org.diopsysteme.fileupload.strategy.Interfaces.StorageStrategy;
 import org.diopsysteme.fileupload.Web.Dtos.Requests.FileReqDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.rmi.server.UID;
 import java.util.UUID;
 @Component
 public class StoreLocalStrategy implements StorageStrategy {
@@ -57,5 +57,8 @@ public class StoreLocalStrategy implements StorageStrategy {
         }
         return Files.readAllBytes(filePath);
     }
-
+    @Override
+    public StorageType getStorageType() {
+        return StorageType.LOCAL;
+    }
 }

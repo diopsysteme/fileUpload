@@ -1,7 +1,8 @@
-package org.diopsysteme.fileupload.Strategy.Impl;
+package org.diopsysteme.fileupload.strategy.Impl;
 
 import org.diopsysteme.fileupload.Data.Entities.File;
-import org.diopsysteme.fileupload.Strategy.Interfaces.StorageStrategy;
+import org.diopsysteme.fileupload.Data.Enums.StorageType;
+import org.diopsysteme.fileupload.strategy.Interfaces.StorageStrategy;
 import org.diopsysteme.fileupload.Web.Dtos.Requests.FileReqDto;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,9 @@ public class StoreDBStrategy implements StorageStrategy {
         }
         return file.getFileData();
     }
-
+    @Override
+    public StorageType getStorageType() {
+        return null;
+    }
 
 }

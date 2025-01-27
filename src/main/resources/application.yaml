@@ -1,27 +1,57 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://ep-empty-union-a53wc52n.us-east-2.aws.neon.tech/fileupload?sslmode=require
-    username: springprojetDB_owner
-    password: JLo7T9vlmVgq
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      connection-timeout: 3000000
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
+  spring:
+    datasource:
+      url: jdbc:postgresql://ep-empty-union-a53wc52n.us-east-2.aws.neon.tech/fileupload?sslmode=require
+      username: springprojetDB_owner
+      password: JLo7T9vlmVgq
+      driver-class-name: org.postgresql.Driver
+      hikari:
+        connection-timeout: 3000000
+    jpa:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect  # Add this line
+        ddl-auto: update
+      show-sql: true
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+    data:
+      redis:
+        password: MpI8vo1qvj9Ua19SIGCUDzQWibMOKZBV
+        host: redis-15349.c57.us-east-1-4.ec2.redns.redis-cloud.com
+        port: 15349
+        timeout: 10000
+        lettuce:
+          pool:
+            max-active: 10
+            max-idle: 5
+            min-idle: 1
+    security:
+      oauth2:
+        client:
+          registration:
+            keycloak:
+              client-id: diopsyskey2
+              client-secret: your-client-secret
+              authorization-grant-type: password
+              scope:
+                - openid
+                - profile
+                - email
+              redirect-uri: http://localhost:8086/
+              auth-server-url: http://localhost:8081
+              realm: master
+              admin:
+                username: admin
+                password: admin
+          provider:
+            keycloak:
+              issuer-uri: http://localhost:8081/realms/master
 
-  data:
-    redis:
-      password: rMrKyYmNUwy2bvuJbDguWtpwY1heT819
-      host: redis-10449.c265.us-east-1-2.ec2.redns.redis-cloud.com
-      port: 10449
-      timeout: 10000
-      lettuce:
-        pool:
-          max-active: 10
-          max-idle: 5
-          min-idle: 1
+        resource-server:
+          jwt:
+            issuer-uri: http://localhost:8081/realms/master
+            jwk-set-uri: ${spring.security.oauth2.resource-server.jwt.issuer-uri}/protocol/openid-connect/certs
+  server:
+    port: 8086
+
+  fileUpload:
+    allowedTypes: image/jpeg,image/png,application/pdf,application/vnd.oasis.opendocument.spreadsheet

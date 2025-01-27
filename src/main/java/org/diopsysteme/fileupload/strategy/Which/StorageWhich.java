@@ -1,13 +1,12 @@
-package org.diopsysteme.fileupload.Strategy.Which;
+package org.diopsysteme.fileupload.strategy.Which;
 
 import org.diopsysteme.fileupload.Data.Enums.StorageType;
-import org.diopsysteme.fileupload.Strategy.Impl.StoreDBStrategy;
-import org.diopsysteme.fileupload.Strategy.Impl.StoreLocalStrategy;
-import org.diopsysteme.fileupload.Strategy.Interfaces.StorageStrategy;
-import org.diopsysteme.fileupload.Strategy.Interfaces.StorageWhichInterface;
+import org.diopsysteme.fileupload.strategy.Impl.StoreDBStrategy;
+import org.diopsysteme.fileupload.strategy.Impl.StoreLocalStrategy;
+import org.diopsysteme.fileupload.strategy.Interfaces.StorageStrategy;
+import org.diopsysteme.fileupload.strategy.Interfaces.StorageWhichInterface;
 import org.springframework.stereotype.Component;
 
-import static org.hibernate.tool.schema.TargetType.DATABASE;
 @Component
 public class StorageWhich implements StorageWhichInterface {
     private final StoreDBStrategy dbStrategy;

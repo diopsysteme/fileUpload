@@ -7,12 +7,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.diopsysteme.fileupload.Data.Enums.StorageType;
 import org.diopsysteme.fileupload.Data.Repositories.UserRepository;
-import org.diopsysteme.fileupload.Strategy.Impl.StoreDBStrategy;
-import org.diopsysteme.fileupload.Strategy.Impl.StoreLocalStrategy;
-import org.diopsysteme.fileupload.Strategy.Interfaces.StorageStrategy;
-import org.diopsysteme.fileupload.Strategy.Interfaces.StorageWhichInterface;
-import org.diopsysteme.fileupload.Strategy.Which.StorageWhich;
-import org.diopsysteme.fileupload.Strategy.Which.StorageWhich2;
+import org.diopsysteme.fileupload.strategy.Interfaces.StorageStrategy;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,8 +31,10 @@ import prog.dependancy.Services.Interfaces.IOtpService;
 import prog.dependancy.Services.Interfaces.JwtServiceInterface;
 import prog.dependancy.Services.Interfaces.QRCodeService;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-
+@EnableCaching
 @Configuration
 @OpenAPIDefinition(info = @Info(title = "Your API Title", version = "v1"),
         security = {
@@ -77,11 +76,12 @@ public class AppBaseConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+//
+//    @Bean
+//    JwtServiceInterface jwtServiceInterface() {
+//        return new JwtService();
+//    }
 
-    @Bean
-    JwtServiceInterface jwtServiceInterface() {
-        return new JwtService();
-    }
     @Bean
     IOtpService iOtpService(){
         return  new OtpService();
@@ -90,10 +90,10 @@ public class AppBaseConfig {
     EmailService emailService(){
         return new EmailServiceImpl();
     }
-    @Bean
-    JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtServiceInterface(), userDetailsService(), handlerExceptionResolver);
-    }
+    //    @Bean
+    //    JwtAuthenticationFilter jwtAuthenticationFilter() {
+    //        return new JwtAuthenticationFilter(jwtServiceInterface(), userDetailsService(), handlerExceptionResolver);
+    //    }
 
     @Bean
     AuthenticationProvider authenticationProvider() {
@@ -106,16 +106,28 @@ public class AppBaseConfig {
     QRCodeService qrCodeService(){
         return new QRCodeServiceImpl();
     }
-    @Bean
-    public Map<StorageType, StorageStrategy> strategyMap(
-            StoreDBStrategy dbStrategy,
-            StoreLocalStrategy localStrategy) {
-        return Map.of(
-                StorageType.DB, dbStrategy,
-                StorageType.LOCAL, localStrategy
-        );
+//    @Bean
+//    public Map<StorageType, StorageStrategy> strategyMap(
+//            StoreDBStrategy dbStrategy,
+//            StoreLocalStrategy localStrategy) {
+//        return Map.of(
+//                StorageType.DB, dbStrategy,
+//                StorageType.LOCAL, localStrategy
+//        );
+//    }
+@Bean
+public Map<StorageType, StorageStrategy> strategyMap(ApplicationContext context) {
+    Map<StorageType, StorageStrategy> strategies = new HashMap<>();
+
+    Map<String, StorageStrategy> beans = context.getBeansOfType(StorageStrategy.class);
+
+    for (StorageStrategy strategy : beans.values()) {
+        String className = strategy.getClass().getSimpleName();
+        StorageType storageType = strategy.getStorageType() ;
+        strategies.put(storageType, strategy);
     }
 
-
+    return Collections.unmodifiableMap(strategies) ;
+}
 
 }

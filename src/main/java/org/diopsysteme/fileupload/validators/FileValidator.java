@@ -1,4 +1,4 @@
-package org.diopsysteme.fileupload.Validators;
+package org.diopsysteme.fileupload.validators;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -10,9 +10,9 @@ import java.lang.annotation.Target;
 @Target({ ElementType.FIELD, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = FileSizeValidator.class)
-public @interface MaxFileSize {
+public @interface FileValidator {
 
-    String message() default "le ficheir depasse la taille accepte";
+    String message() default "le fichier depasse la taille acceptee";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 

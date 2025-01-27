@@ -1,4 +1,4 @@
-package org.diopsysteme.fileupload.Strategy.Interfaces;
+package org.diopsysteme.fileupload.strategy.Interfaces;
 
 import org.diopsysteme.fileupload.Data.Enums.StorageType;
 

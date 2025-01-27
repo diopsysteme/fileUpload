@@ -1,8 +1,9 @@
 package org.diopsysteme.fileupload.Web.Controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.diopsysteme.fileupload.Data.Entities.File;
-import org.diopsysteme.fileupload.Services.Impl.FileService;
+import org.diopsysteme.fileupload.services.Impl.FileService;
 import org.diopsysteme.fileupload.Web.Dtos.Requests.FileReqDto;
 import org.diopsysteme.fileupload.Web.Dtos.Responses.FileDownloadDto;
 import org.diopsysteme.fileupload.Web.Dtos.Responses.FileResDto;
@@ -10,11 +11,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import prog.dependancy.Web.Controller.AbstractController;
 import prog.dependancy.Services.Interfaces.AbstractService;
 
 import java.io.FileNotFoundException;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/file")
@@ -35,8 +38,10 @@ public class FileController extends AbstractController<File, FileReqDto, FileRes
 
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
-    public ResponseEntity<FileResDto> save(@ModelAttribute FileReqDto request) {
+    public ResponseEntity<FileResDto> save(@Valid @ModelAttribute FileReqDto request) {
         FileResDto response = service.save(request);
+        response.add(linkTo(methodOn(FileController.class).downloadFile(response.getId())).withRel("download"));
+        response.add(linkTo(methodOn(FileController.class).searchFiles(null,0,10)).withRel("getAllfiles or search using file name"));
         return ResponseEntity.ok(response);
     }
     @GetMapping("/download/{id}")

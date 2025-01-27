@@ -1,4 +1,4 @@
-package org.diopsysteme.fileupload.Services.Impl;
+package org.diopsysteme.fileupload.services.Impl;
 
 import org.diopsysteme.fileupload.Data.Entities.User;
 import org.diopsysteme.fileupload.Data.Repositories.UserRepository;
@@ -13,9 +13,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService extends AbstractService<User, UserReqDto, UserResDto> {
     @Autowired
+    KeycloackAdminService keycloackAdminService;
+    @Autowired
+    private UserMapper mapper2;
+
 private PasswordEncoder passwordEncoder;
     public UserService(UserRepository repository, UserMapper mapper) {
         this.repository = repository;
+        mapper2=mapper;
         this.mapper = mapper;
     }
     @Override
@@ -23,6 +28,7 @@ private PasswordEncoder passwordEncoder;
         User user = mapper.toEntity(userReqDto);
         user.setPassword(passwordEncoder.encode(userReqDto.getPassword()));
        User user1 = repository.save(user);
+         keycloackAdminService.createUser(mapper2.toKeycloak(user1));
         return mapper.toDto(user1);
     }
 }
