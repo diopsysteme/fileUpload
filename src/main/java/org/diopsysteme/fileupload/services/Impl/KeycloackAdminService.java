@@ -1,25 +1,20 @@
 package org.diopsysteme.fileupload.services.Impl;
 
-import org.diopsysteme.fileupload.Web.Dtos.Requests.CrUKcReqDTO;
-import org.diopsysteme.fileupload.Web.Dtos.Requests.LoginReqDto;
+import org.diopsysteme.fileupload.model.dtos.requests.KeycloakRequestDto;
+import org.diopsysteme.fileupload.model.dtos.requests.LoginRequestDto;
 import org.diopsysteme.fileupload.services.Interfaces.KeycloackAdminIService;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
-import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 
 
 import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 @Service
 public class KeycloackAdminService implements KeycloackAdminIService {
     @Value("${spring.security.oauth2.client.registration.keycloak.realm}")
@@ -55,7 +50,7 @@ public class KeycloackAdminService implements KeycloackAdminIService {
             throw new RuntimeException("Failed to create user in Keycloak. Reason: " + e.getMessage(), e);
         }
     }
-
+//TODO HTTP STATUS
     private Response handleResponse(Response res) {
         if (res.getStatus() >= 200 && res.getStatus() < 300) {
             System.out.println("User successfully created. Status: " + res.getStatus());
@@ -66,11 +61,11 @@ public class KeycloackAdminService implements KeycloackAdminIService {
             throw new RuntimeException("Error from Keycloak: " + errorMessage);
         }
     }
-    public Response login(LoginReqDto loginReqDto){
+    public Response login(LoginRequestDto loginRequestDto){
         try {
-                Keycloak keycloak = keycloackCredentials(loginReqDto);
+                Keycloak keycloak = keycloackCredentials(loginRequestDto);
                 System.out.println("Successfully connected to Keycloak realm: " + keycloak.toString()   );
-                AccessTokenResponse token = keycloackCredentials(loginReqDto).tokenManager().getAccessToken();
+                AccessTokenResponse token = keycloackCredentials(loginRequestDto).tokenManager().getAccessToken();
 
             if (token != null) {
                 System.out.println("Successfully logged in. Token: " + token);
@@ -84,20 +79,20 @@ public class KeycloackAdminService implements KeycloackAdminIService {
             return Response.serverError().entity(e.getMessage()).build();
         }
     }
-    private Keycloak keycloackCredentials(LoginReqDto loginReqDto){
+    private Keycloak keycloackCredentials(LoginRequestDto loginRequestDto){
         return KeycloakBuilder.builder()
                 .serverUrl(authServerUrl)
                 .realm(realm)
                 .clientId(clientId)
                 .grantType(OAuth2Constants.PASSWORD)
-                .username(loginReqDto.getLogin())
-                .password(loginReqDto.getPassword())
+                .username(loginRequestDto.getLogin())
+                .password(loginRequestDto.getPassword())
                 .build();
 
     }
 
     @Override
-    public Response updateUser(Long id, CrUKcReqDTO crUKcReqDTO) {
+    public Response updateUser(Long id, KeycloakRequestDto keycloakRequestDto) {
         return null;
     }
 

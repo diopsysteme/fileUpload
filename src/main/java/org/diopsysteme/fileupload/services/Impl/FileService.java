@@ -1,18 +1,16 @@
 package org.diopsysteme.fileupload.services.Impl;
 
-import org.diopsysteme.fileupload.Data.Entities.File;
-import org.diopsysteme.fileupload.Data.Repositories.FileRepository;
-import org.diopsysteme.fileupload.strategy.Interfaces.StorageStrategy;
-import org.diopsysteme.fileupload.strategy.Interfaces.StorageWhichInterface;
-import org.diopsysteme.fileupload.Web.Dtos.Mappers.FileMapper;
-import org.diopsysteme.fileupload.Web.Dtos.Requests.FileReqDto;
-import org.diopsysteme.fileupload.Web.Dtos.Responses.FileDownloadDto;
-import org.diopsysteme.fileupload.Web.Dtos.Responses.FileResDto;
-import org.hibernate.annotations.Cache;
+import org.diopsysteme.fileupload.domain.data.entities.File;
+import org.diopsysteme.fileupload.repositories.FileRepository;
+import org.diopsysteme.fileupload.domain.strategy.interfaces.StorageStrategy;
+import org.diopsysteme.fileupload.domain.strategy.interfaces.StorageIFactory;
+import org.diopsysteme.fileupload.services.mappers.FileMapper;
+import org.diopsysteme.fileupload.model.dtos.requests.FileRequestDto;
+import org.diopsysteme.fileupload.model.dtos.responses.FileDownloadResponseDto;
+import org.diopsysteme.fileupload.model.dtos.responses.FileResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,59 +22,60 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import static org.diopsysteme.fileupload.domain.data.constants.ErrorConstant.FILE_NOT_FOUND;
+import static org.diopsysteme.fileupload.domain.data.constants.ErrorConstant.FILE_STORAGE_ERROR;
+
+
 @Service
-public class FileService extends AbstractService<File, FileReqDto, FileResDto> {
+public class FileService extends AbstractService<File, FileRequestDto, FileResponseDto> {
 @Autowired
 FileRepository fileRepository;
 @Autowired
         FileMapper fileMapper;
 
-    StorageWhichInterface storageWhich;
-    public FileService(FileRepository repository, FileMapper mapper, @Qualifier("storageWhich3") StorageWhichInterface storageWhich) {
+    StorageIFactory storageFactory;
+    public FileService(FileRepository repository, FileMapper mapper, @Qualifier("storageFactory") StorageIFactory storageFactory) {
         this.repository = repository;
         this.mapper = mapper;
-        this.storageWhich = storageWhich;
+        this.storageFactory = storageFactory;
     }
     @CacheEvict(value = "files",allEntries = true)
     @Override
-    public FileResDto save(FileReqDto fileReqDto){
+    public FileResponseDto save(FileRequestDto fileRequestDto)  {
+        System.out.println("here");
         File file = new File();
 
-        String originalFileName = fileReqDto.getFile().getOriginalFilename();
-        String mimeType = fileReqDto.getFile().getContentType();
-        file.setFileName(fileReqDto.getFileName() != null && !fileReqDto.getFileName().isEmpty()
-                ? fileReqDto.getFileName()
-                : originalFileName);
-
+        String originalFileName = fileRequestDto.getFile().getOriginalFilename();
+        String mimeType = fileRequestDto.getFile().getContentType();
+        //TODO tell, do not ask
+        file.setFileName(fileRequestDto.getFileName());
         file.setFileType(mimeType);
-        file.setStorageType(fileReqDto.getWhere());
+        file.setStorageType(fileRequestDto.getType());
         file.setFileExtension(getExtension(originalFileName));
+        StorageStrategy storageStrategy = storageFactory.getWhichStorageType(fileRequestDto.getType());
+        System.out.println("here2"+file.toString());
 
-        StorageStrategy storageStrategy = storageWhich.getWhichStorageType(fileReqDto.getWhere());
+
         try {
-            storageStrategy.store(file,fileReqDto);
+            storageStrategy.store(file, fileRequestDto);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(FILE_STORAGE_ERROR, e);
         }
-
         file.setDate(LocalDate.now());
-
         File fileS = repository.save(file);
+        System.out.println("here333");
+
         return mapper.toDto(fileS);
     }
     @Cacheable(value = "files",key = "#id")
-        public FileDownloadDto getFileForDownload(Long id) throws FileNotFoundException {
+        public FileDownloadResponseDto getFileForDownload(Long id) throws IOException {
         File file = fileRepository.findById(id)
-                .orElseThrow(() -> new FileNotFoundException("Fichier non trouvé avec l'ID: " + id));
+                .orElseThrow(() -> new FileNotFoundException(FILE_NOT_FOUND));
 
-        try {
-            StorageStrategy strategy = storageWhich.getWhichStorageType(file.getStorageType());
+            StorageStrategy strategy = storageFactory.getWhichStorageType(file.getStorageType());
             byte[] content = strategy.get(file);
 
             return fileMapper.toDownloadDtoWithContent(file, content);
-        } catch (IOException e) {
-            throw new RuntimeException("Erreur lors de la lecture du fichier", e);
-        }
     }
 
     private String getExtension(String fileName) {
@@ -87,7 +86,7 @@ FileRepository fileRepository;
 
 
 @Cacheable(value = "files")
-    public Page<FileResDto> searchFiles(String searchQuery, int page, int size) {
+    public Page<FileResponseDto> searchFiles(String searchQuery, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
         Page<File> filePage;

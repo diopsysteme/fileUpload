@@ -1,6 +1,5 @@
 package org.diopsysteme.fileupload.services.Interfaces;
-import org.diopsysteme.fileupload.Web.Dtos.Requests.CrUKcReqDTO;
-import org.keycloak.admin.client.Keycloak;
+import org.diopsysteme.fileupload.model.dtos.requests.KeycloakRequestDto;
 import org.keycloak.representations.idm.UserRepresentation;
 
 import jakarta.ws.rs.core.Response;
@@ -8,7 +7,7 @@ import jakarta.ws.rs.core.Response;
 public interface KeycloackAdminIService {
 
 public Response createUser(UserRepresentation crUKcReqDTO);
-public Response updateUser(Long id, CrUKcReqDTO crUKcReqDTO);
+public Response updateUser(Long id, KeycloakRequestDto keycloakRequestDto);
 public Response deleteUser(Long id);
 public UserRepresentation getUser(Long id);
 public Response getUsers();

@@ -1,11 +1,11 @@
 package org.diopsysteme.fileupload.services.Interfaces;
 
 
-import org.diopsysteme.fileupload.Data.Entities.User;
-import org.diopsysteme.fileupload.Web.Dtos.Requests.LoginReqDto;
+import org.diopsysteme.fileupload.domain.data.entities.User;
+import org.diopsysteme.fileupload.model.dtos.requests.LoginRequestDto;
 
 public interface AuthenticationIService {
 
-    public User authenticate(LoginReqDto input);
+    public User authenticate(LoginRequestDto input);
 
 }

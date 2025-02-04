@@ -1,17 +1,17 @@
 package org.diopsysteme.fileupload.services.Impl;
 
-import org.diopsysteme.fileupload.Data.Entities.User;
-import org.diopsysteme.fileupload.Data.Repositories.UserRepository;
-import org.diopsysteme.fileupload.Web.Dtos.Mappers.UserMapper;
-import org.diopsysteme.fileupload.Web.Dtos.Requests.UserReqDto;
-import org.diopsysteme.fileupload.Web.Dtos.Responses.UserResDto;
+import org.diopsysteme.fileupload.domain.data.entities.User;
+import org.diopsysteme.fileupload.repositories.UserRepository;
+import org.diopsysteme.fileupload.services.mappers.UserMapper;
+import org.diopsysteme.fileupload.model.dtos.requests.UserRequestDto;
+import org.diopsysteme.fileupload.model.dtos.responses.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import prog.dependancy.Services.Interfaces.AbstractService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService extends AbstractService<User, UserReqDto, UserResDto> {
+public class UserService extends AbstractService<User, UserRequestDto, UserResponseDto> {
     @Autowired
     KeycloackAdminService keycloackAdminService;
     @Autowired
@@ -24,9 +24,9 @@ private PasswordEncoder passwordEncoder;
         this.mapper = mapper;
     }
     @Override
-   public UserResDto save(UserReqDto userReqDto){
-        User user = mapper.toEntity(userReqDto);
-        user.setPassword(passwordEncoder.encode(userReqDto.getPassword()));
+   public UserResponseDto save(UserRequestDto userRequestDto){
+        User user = mapper.toEntity(userRequestDto);
+        user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
        User user1 = repository.save(user);
          keycloackAdminService.createUser(mapper2.toKeycloak(user1));
         return mapper.toDto(user1);

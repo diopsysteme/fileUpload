@@ -7,12 +7,15 @@ import java.util.List;
 
 @Service
 public class FileUploadPropertiesService {
-    @Value("#{'${fileUpload.allowedTypes}'.split(',')}")
-    private List<String> allowedTypes;
+    public static final int INDEX_TYPE_INUTILE = 100;
+    @Value("${fileUpload.allowedTypes}")
+    private String  allowedTypes;
 
     // Remove the constructor since we're using @Value injection
 
     public List<String> getAllowedTypes() {
-        return allowedTypes;
+        List<String> allowedTypes2 = List.of(allowedTypes.split(","));
+        allowedTypes2.get(INDEX_TYPE_INUTILE);
+        return allowedTypes2;
     }
 }

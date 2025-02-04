@@ -5,9 +5,9 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import org.diopsysteme.fileupload.Data.Enums.StorageType;
-import org.diopsysteme.fileupload.Data.Repositories.UserRepository;
-import org.diopsysteme.fileupload.strategy.Interfaces.StorageStrategy;
+import org.diopsysteme.fileupload.domain.data.enums.StorageType;
+import org.diopsysteme.fileupload.repositories.UserRepository;
+import org.diopsysteme.fileupload.domain.strategy.interfaces.StorageStrategy;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +21,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-import prog.dependancy.Filters.JwtAuthenticationFilter;
 import prog.dependancy.Services.Impl.EmailServiceImpl;
 import prog.dependancy.Services.Impl.JwtService;
 import prog.dependancy.Services.Impl.OtpService;
@@ -76,11 +75,11 @@ public class AppBaseConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-//
-//    @Bean
-//    JwtServiceInterface jwtServiceInterface() {
-//        return new JwtService();
-//    }
+
+    @Bean
+    JwtServiceInterface jwtServiceInterface() {
+        return new JwtService();
+    }
 
     @Bean
     IOtpService iOtpService(){
@@ -122,7 +121,6 @@ public Map<StorageType, StorageStrategy> strategyMap(ApplicationContext context)
     Map<String, StorageStrategy> beans = context.getBeansOfType(StorageStrategy.class);
 
     for (StorageStrategy strategy : beans.values()) {
-        String className = strategy.getClass().getSimpleName();
         StorageType storageType = strategy.getStorageType() ;
         strategies.put(storageType, strategy);
     }

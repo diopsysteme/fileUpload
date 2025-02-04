@@ -6,18 +6,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import prog.dependancy.Config.FirebaseConfig;
-import prog.dependancy.Exceptions.GlobalException;
 import prog.dependancy.Services.Impl.FirestoreService;
-import prog.dependancy.Web.Advice.ApiResponseBodyAdvice;
 
 @SpringBootApplication
 @EnableTransactionManagement
-@EntityScan("org.diopsysteme.fileupload.Data.Entities")
-@EnableJpaRepositories("org.diopsysteme.fileupload.Data.Repositories")
+@EntityScan("org.diopsysteme.fileupload.domain.data.entities")
+@EnableJpaRepositories("org.diopsysteme.fileupload.repositories")
 @ComponentScan(
         basePackages = {"org.diopsysteme.fileupload"},
         excludeFilters = @ComponentScan.Filter(

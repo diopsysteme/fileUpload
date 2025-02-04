@@ -1,8 +1,8 @@
 package org.diopsysteme.fileupload.services.Impl;
 
-import org.diopsysteme.fileupload.Data.Entities.User;
-import org.diopsysteme.fileupload.Data.Repositories.UserRepository;
-import org.diopsysteme.fileupload.Web.Dtos.Requests.LoginReqDto;
+import org.diopsysteme.fileupload.domain.data.entities.User;
+import org.diopsysteme.fileupload.repositories.UserRepository;
+import org.diopsysteme.fileupload.model.dtos.requests.LoginRequestDto;
 import org.diopsysteme.fileupload.services.Interfaces.AuthenticationIService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +19,7 @@ public class AuthenticateService implements AuthenticationIService {
 
     }
 
-        public User authenticate(LoginReqDto credentials) {
+        public User authenticate(LoginRequestDto credentials) {
          authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         credentials.getLogin(),credentials.getPassword()
