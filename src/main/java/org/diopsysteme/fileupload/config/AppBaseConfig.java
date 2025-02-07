@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.diopsysteme.fileupload.domain.data.enums.StorageType;
 import org.diopsysteme.fileupload.repositories.UserRepository;
-import org.diopsysteme.fileupload.domain.strategy.interfaces.StorageStrategy;
+import org.diopsysteme.fileupload.services.strategy.interfaces.StorageStrategy;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;

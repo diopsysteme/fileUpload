@@ -1,4 +1,4 @@
-package org.diopsysteme.fileupload.domain.data.entities;
+package org.diopsysteme.fileupload.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;

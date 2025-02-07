@@ -1,7 +1,7 @@
 package org.diopsysteme.fileupload.model.dtos.requests;
 
 import lombok.Data;
-import org.diopsysteme.fileupload.domain.data.entities.User;
+import org.diopsysteme.fileupload.domain.entities.User;
 import prog.dependancy.Validators.UniqueField;
 
 @Data

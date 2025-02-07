@@ -1,9 +1,9 @@
 package org.diopsysteme.fileupload.services.Impl;
 
-import org.diopsysteme.fileupload.domain.data.entities.File;
+import org.diopsysteme.fileupload.domain.entities.File;
 import org.diopsysteme.fileupload.repositories.FileRepository;
-import org.diopsysteme.fileupload.domain.strategy.interfaces.StorageStrategy;
-import org.diopsysteme.fileupload.domain.strategy.interfaces.StorageIFactory;
+import org.diopsysteme.fileupload.services.strategy.interfaces.StorageStrategy;
+import org.diopsysteme.fileupload.services.strategy.interfaces.StorageIFactory;
 import org.diopsysteme.fileupload.services.mappers.FileMapper;
 import org.diopsysteme.fileupload.model.dtos.requests.FileRequestDto;
 import org.diopsysteme.fileupload.model.dtos.responses.FileDownloadResponseDto;
@@ -22,8 +22,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import static org.diopsysteme.fileupload.domain.data.constants.ErrorConstant.FILE_NOT_FOUND;
-import static org.diopsysteme.fileupload.domain.data.constants.ErrorConstant.FILE_STORAGE_ERROR;
+import static org.diopsysteme.fileupload.config.Constants.FILE_NOT_FOUND;
+import static org.diopsysteme.fileupload.config.Constants.FILE_STORAGE_ERROR;
 
 
 @Service

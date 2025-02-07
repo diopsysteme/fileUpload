@@ -13,7 +13,7 @@ import prog.dependancy.Services.Impl.FirestoreService;
 
 @SpringBootApplication
 @EnableTransactionManagement
-@EntityScan("org.diopsysteme.fileupload.domain.data.entities")
+@EntityScan("org.diopsysteme.fileupload.domain.entities")
 @EnableJpaRepositories("org.diopsysteme.fileupload.repositories")
 @ComponentScan(
         basePackages = {"org.diopsysteme.fileupload"},

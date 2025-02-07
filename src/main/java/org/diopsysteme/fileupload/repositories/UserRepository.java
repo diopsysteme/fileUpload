@@ -1,6 +1,6 @@
 package org.diopsysteme.fileupload.repositories;
 
-import org.diopsysteme.fileupload.domain.data.entities.User;
+import org.diopsysteme.fileupload.domain.entities.User;
 import prog.dependancy.Datas.Repository.SoftDeleteRepository;
 import org.springframework.stereotype.Repository;
 

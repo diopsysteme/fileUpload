@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.diopsysteme.fileupload.domain.data.enums.StorageType;
-import org.diopsysteme.fileupload.domain.validators.FileValidator;
+import org.diopsysteme.fileupload.services.validators.FileValidator;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data

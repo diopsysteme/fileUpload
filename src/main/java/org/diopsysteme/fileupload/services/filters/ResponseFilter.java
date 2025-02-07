@@ -1,4 +1,4 @@
-package org.diopsysteme.fileupload.config.filters;
+package org.diopsysteme.fileupload.services.filters;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;

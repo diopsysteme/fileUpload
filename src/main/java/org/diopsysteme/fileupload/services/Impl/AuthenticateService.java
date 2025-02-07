@@ -1,6 +1,6 @@
 package org.diopsysteme.fileupload.services.Impl;
 
-import org.diopsysteme.fileupload.domain.data.entities.User;
+import org.diopsysteme.fileupload.domain.entities.User;
 import org.diopsysteme.fileupload.repositories.UserRepository;
 import org.diopsysteme.fileupload.model.dtos.requests.LoginRequestDto;
 import org.diopsysteme.fileupload.services.Interfaces.AuthenticationIService;

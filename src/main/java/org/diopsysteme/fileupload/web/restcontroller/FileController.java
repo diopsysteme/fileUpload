@@ -3,7 +3,7 @@ package org.diopsysteme.fileupload.web.restcontroller;
 import com.google.j2objc.annotations.AutoreleasePool;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import org.diopsysteme.fileupload.domain.data.entities.File;
+import org.diopsysteme.fileupload.domain.entities.File;
 import org.diopsysteme.fileupload.services.Impl.FileService;
 import org.diopsysteme.fileupload.model.dtos.requests.FileRequestDto;
 import org.diopsysteme.fileupload.model.dtos.responses.FileDownloadResponseDto;

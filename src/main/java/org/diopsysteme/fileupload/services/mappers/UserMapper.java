@@ -1,6 +1,6 @@
 package org.diopsysteme.fileupload.services.mappers;
 
-import org.diopsysteme.fileupload.domain.data.entities.User;
+import org.diopsysteme.fileupload.domain.entities.User;
 import org.diopsysteme.fileupload.model.dtos.requests.UserRequestDto;
 import org.diopsysteme.fileupload.model.dtos.responses.UserResponseDto;
 import org.keycloak.representations.idm.UserRepresentation;

@@ -1,6 +1,6 @@
 package org.diopsysteme.fileupload.services.mappers;
 
-import org.diopsysteme.fileupload.domain.data.entities.File;
+import org.diopsysteme.fileupload.domain.entities.File;
 import org.diopsysteme.fileupload.model.dtos.requests.FileRequestDto;
 import org.diopsysteme.fileupload.model.dtos.responses.FileDownloadResponseDto;
 import org.diopsysteme.fileupload.model.dtos.responses.FileResponseDto;

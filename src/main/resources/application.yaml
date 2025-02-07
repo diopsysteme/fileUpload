@@ -1,8 +1,8 @@
   spring:
     datasource:
-      url: jdbc:postgresql://ep-empty-union-a53wc52n.us-east-2.aws.neon.tech/fileupload?sslmode=require
-      username: springprojetDB_owner
-      password: JLo7T9vlmVgq
+      url: jdbc:postgresql://localhost:5432/fileupload
+      username: mhd
+      password: passer
       driver-class-name: org.postgresql.Driver
       hikari:
         connection-timeout: 3000000
@@ -55,3 +55,4 @@
 
   fileUpload:
     allowedTypes: image/jpeg,image/png,application/pdf,application/vnd.oasis.opendocument.spreadsheet
+    maxFileSize: 10485760
