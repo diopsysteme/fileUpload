@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app:
+    image: openjdk:21-jdk
+    container_name: spring_app
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: ["java", "-jar", "target/fileUpload-0.0.1-SNAPSHOT.jar"]
+    ports:
+      - "8089:8089"
+    networks:
+      - springboot
+
+networks:
+  springboot:
+    driver: bridge
